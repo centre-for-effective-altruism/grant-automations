@@ -1,7 +1,7 @@
 import createError from 'http-errors'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { requestWrapper } from '../../lib/helpers'
+import { requestWrapper } from '../../utils/api'
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { recordId } = req.body
