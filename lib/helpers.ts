@@ -11,13 +11,13 @@ export function requestWrapper(
   return function handler(req: VercelRequest, res: VercelResponse) {
     try {
       const method = req.method as HTTPMethod | 'OPTIONS'
+      console.log(`Handler invoked with ${method}`)
+
       if (method === 'OPTIONS') {
         const allowedOptions = Object.keys(methodHandlers)
         res.setHeader('Allow', allowedOptions.join(', ')).status(204).end()
         return
       }
-
-      console.log(method)
 
       const methodHandler = methodHandlers[method]
       if (!methodHandler) {
