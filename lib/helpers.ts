@@ -17,6 +17,8 @@ export function requestWrapper(
         return
       }
 
+      console.log(method)
+
       const methodHandler = methodHandlers[method]
       if (!methodHandler) {
         res.status(405).send('Method not allowed')
