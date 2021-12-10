@@ -1,5 +1,12 @@
-import { HttpError } from 'http-errors'
+import { FieldSet, Record as AirtableRecord } from 'airtable'
+import createHttpError, { HttpError } from 'http-errors'
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
+import { ZodError } from 'zod'
+
+import { bases } from '../lib/airtable'
+import { BodyWithRecordParser } from '../validations/body'
+import { WithTableParser } from '../validations/query'
+import { TableName } from '../validations/tables'
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
@@ -26,14 +33,40 @@ export function requestWrapper(
       }
       await methodHandler(req, res)
     } catch (err) {
-      console.error(err)
-      if (err instanceof HttpError) {
+      if (err instanceof ZodError) {
+        const issues = err.issues.map((issue) => issue.message).join(', ')
+        res.status(400).send(issues)
+      } else if (err instanceof HttpError) {
         res.status(err.status).send(err.message)
       } else if (err instanceof Error) {
+        console.error(err)
         res.status(500).send(err.message)
       } else {
+        console.error(err)
         res.status(500).send('Unknown error')
       }
     }
+  }
+}
+
+/** Convenience function to check that a record exists on a given table */
+export function recordOnTableHandler(
+  handler: (
+    table: TableName,
+    record: AirtableRecord<FieldSet>,
+    req: NextApiRequest,
+    res: NextApiResponse,
+  ) => Promise<void> | void,
+): NextApiHandler {
+  return async function (req: NextApiRequest, res: NextApiResponse) {
+    const { recordId } = BodyWithRecordParser.parse(req.body)
+    const { table } = WithTableParser.parse(req.query)
+    const record = await bases[table]('Grant Applications').find(recordId)
+    if (!record)
+      throw createHttpError(
+        404,
+        `Record ${recordId} not found on table ${table}`,
+      )
+    await handler(table, record, req, res)
   }
 }

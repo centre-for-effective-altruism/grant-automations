@@ -1,13 +1,16 @@
-import createError from 'http-errors'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { z } from 'zod'
 
 import { tables } from '../../lib/airtable'
 import { requestWrapper } from '../../utils/api'
+import { recordId } from '../../validations/airtable'
+
+const BodyParser = z.object({
+  recordId,
+})
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { recordId } = req.body
-
-  if (!recordId) throw createError(400, 'Invalid record id')
+  const { recordId } = BodyParser.parse(req.body)
   const record = await tables.main.grants.find(recordId)
   res.json(record)
 }

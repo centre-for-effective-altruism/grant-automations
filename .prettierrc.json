@@ -1,6 +1,6 @@
 {
   "experimentalBabelParserPluginsList": ["typescript", "classProperties"],
-  "importOrder": ["^@aletheia/(.*)$", "^[./]"],
+  "importOrder": ["^[./]"],
   "importOrderSeparation": true,
   "jsdocParser": true,
   "jsonRecursiveSort": true,
