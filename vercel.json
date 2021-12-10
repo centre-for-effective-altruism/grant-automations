@@ -1,5 +1,0 @@
-{
-  "functions": {
-    "public/api/**/*.ts": {}
-  }
-}
