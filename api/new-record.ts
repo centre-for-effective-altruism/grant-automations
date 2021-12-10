@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import createError from 'http-errors'
 
-import { requestWrapper } from '../../lib/helpers'
+import { requestWrapper } from '../lib/helpers'
 
 async function postHandler(req: VercelRequest, res: VercelResponse) {
   const { recordId } = req.body
