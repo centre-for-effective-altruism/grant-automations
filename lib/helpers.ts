@@ -1,14 +1,14 @@
-import { VercelApiHandler, VercelRequest, VercelResponse } from '@vercel/node'
 import { HttpError } from 'http-errors'
+import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export function requestWrapper(
   methodHandlers: Partial<{
-    [x in HTTPMethod]: VercelApiHandler
+    [x in HTTPMethod]: NextApiHandler
   }>,
 ) {
-  return function handler(req: VercelRequest, res: VercelResponse) {
+  return async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const method = req.method as HTTPMethod | 'OPTIONS'
       console.log(`Handler invoked with ${method}`)
@@ -24,9 +24,8 @@ export function requestWrapper(
         res.status(405).send('Method not allowed')
         return
       }
-      return methodHandler(req, res)
+      await methodHandler(req, res)
     } catch (err) {
-      console.error(err)
       if (err instanceof HttpError) {
         res.status(err.status).send(err.message)
       } else if (err instanceof Error) {
