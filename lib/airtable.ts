@@ -15,3 +15,9 @@ export const client = new Airtable({ apiKey: AIRTABLE_API_KEY })
 export const bases = {
   main: client.base(AIRTABLE_MAIN_BASE_ID),
 }
+
+export const tables = {
+  main: {
+    grants: bases.main('Grant Applications'),
+  },
+}
