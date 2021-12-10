@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "strict": true,
     "types": ["node"]
   }
 }
