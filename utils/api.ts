@@ -26,6 +26,7 @@ export function requestWrapper(
       }
       await methodHandler(req, res)
     } catch (err) {
+      console.error(err)
       if (err instanceof HttpError) {
         res.status(err.status).send(err.message)
       } else if (err instanceof Error) {
