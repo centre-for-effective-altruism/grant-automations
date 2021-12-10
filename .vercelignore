@@ -1,3 +1,7 @@
 # Ignore everything (folders and files) on root only
-package.json
-tsconfig.json
+/*
+!api
+!vercel.json
+!*.html
+!lib
+!node_modules
