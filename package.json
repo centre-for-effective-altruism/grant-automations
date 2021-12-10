@@ -5,9 +5,7 @@
   "license": "MIT",
   "author": "colophonemes <dev@colophonemes.com>",
   "main": "index.js",
-  "scripts": {
-    "dev": "vercel dev"
-  },
+  "scripts": {},
   "dependencies": {
     "@vercel/node": "^1.12.1",
     "eslint": "^8.4.1",
